@@ -1,20 +1,37 @@
 let amigos = [];
 
 function adicionar() {
-    let amigo = document.getElementById('nome-amigo');
-    let lista = document.getElementById('lista-amigos');
-    amigos.push(amigo.value);
-    if (lista.textContent == '') {
-        lista.textContent = amigo.value;
-    } else {
-        lista.textContent = lista.textContent + ', ' + amigo.value;
+    let amigoInput = document.getElementById('nome-amigo');
+    let nomeOriginal = amigoInput.value.trim();
+
+    if (nomeOriginal === '') {
+        alert("Por favor, insira o nome do amigo.");
+        return;
     }
-    amigo.value = '';
+
+    let nomeMaiusculo = nomeOriginal.toUpperCase();
+
+    if (amigos.some(amigo => amigo.toUpperCase() === nomeMaiusculo)) {
+        alert("Este amigo já foi adicionado.");
+        amigoInput.value = '';
+        return;
+    }
+
+    amigos.push(nomeOriginal);
+
+    let lista = document.getElementById('lista-amigos');
+    if (lista.textContent === '') {
+        lista.textContent = nomeOriginal;
+    } else {
+        lista.textContent += ', ' + nomeOriginal;
+    }
+
+    amigoInput.value = '';
 }
 
 function sortear() {
-    if (amigos.length < 2) {
-        alert("Adicione pelo menos 2 amigos para sortear!");
+    if (amigos.length < 4) {
+        alert("Adicione pelo menos 4 amigos para sortear!");
         return;
     }
 
@@ -26,7 +43,6 @@ function sortear() {
 
     for (let i = 0; i < amigos.length; i++) {
         if (amigos[i] === sorteados[i]) {
-            // Se alguém tirou a si mesmo, refaz o sorteio:
             sortear();
             return;
         }
@@ -37,16 +53,10 @@ function sortear() {
     }
 }
 
-
 function embaralha(lista) {
-
-    for (let indice = lista.length; indice; indice--) {
-
-        const indiceAleatorio = Math.floor(Math.random() * indice);
-
-        // atribuição via destructuring
-        [lista[indice - 1], lista[indiceAleatorio]] = 
-            [lista[indiceAleatorio], lista[indice - 1]];
+    for (let i = lista.length; i; i--) {
+        const j = Math.floor(Math.random() * i);
+        [lista[i - 1], lista[j]] = [lista[j], lista[i - 1]];
     }
 }
 
